@@ -1,6 +1,10 @@
-from . import chart
+from typing import TYPE_CHECKING
+
 from .array2d import Array2DTracer
 from algorithm_visualizer.types import Serializable, SerializableSequence, UNDEFINED
+
+if TYPE_CHECKING:
+    from .chart import ChartTracer
 
 
 class Array1DTracer(Array2DTracer):
@@ -19,5 +23,5 @@ class Array1DTracer(Array2DTracer):
     def deselect(self, sx: int, ex: int = UNDEFINED):
         self.command("deselect", sx, ex)
 
-    def chart(self, chartTracer: "chart.ChartTracer"):
+    def chart(self, chartTracer: "ChartTracer"):
         self.command("chart", chartTracer.key)
