@@ -68,7 +68,8 @@ class Array2D(Array1D):
         return self
 
     def create(self) -> List[List]:
-        return [super().create() for _ in range(self._N)]
+        # Explicitly pass args to super() to avoid a TypeError (BPO 26495).
+        return [super(Array2D, self).create() for _ in range(self._N)]
 
 
 class Graph(_Randomizer):
