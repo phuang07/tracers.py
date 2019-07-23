@@ -60,8 +60,8 @@ class Array1D(_Randomizer):
 
 class Array2D(Array1D):
     def __init__(self, N: int = 10, M: int = 10, randomizer: _Randomizer = Integer()):
-        super().__init__(N, randomizer)
-        self._M = M
+        super().__init__(M, randomizer)
+        self._M = N
 
     def sorted(self, sorted: bool = True) -> "Array2D":
         self._sorted = sorted
@@ -69,7 +69,7 @@ class Array2D(Array1D):
 
     def create(self) -> List[List]:
         # Explicitly pass args to super() to avoid a TypeError (BPO 26495).
-        return [super(Array2D, self).create() for _ in range(self._N)]
+        return [super(Array2D, self).create() for _ in range(self._M)]
 
 
 class Graph(_Randomizer):
