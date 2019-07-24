@@ -93,15 +93,19 @@ class Graph(_Randomizer):
         for i in range(self._N):
             for j in range(self._N):
                 if i == j:
+                    # Vertex can't have an edge to itself (no loops)
                     graph[i][j] = 0
                 elif self._directed or i < j:
                     if random.random() >= self._ratio:
+                        # Don't create an edge if the ratio is exceeded
                         graph[i][j] = 0
                     elif self._weighted:
                         graph[i][j] = self._randomizer.create()
                     else:
                         graph[i][j] = 1
                 else:
+                    # Edge is the same for both its vertices if it is not directed
+                    # In such case the initial weight for the edge is set above when i < j
                     graph[i][j] = graph[j][i]
 
         return graph
