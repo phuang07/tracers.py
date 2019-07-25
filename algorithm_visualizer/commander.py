@@ -15,7 +15,7 @@ class Commander:
     commands: List[Dict[str, Serializable]] = []
 
     def __init__(self, *args: Serializable):
-        self._objectCount += 1
+        Commander._objectCount += 1
         self.key = self._keyRandomizer.create()
         self.command(self.__class__.__name__, *args)
 
@@ -38,5 +38,5 @@ class Commander:
         self._command(self.key, method, *args)
 
     def destroy(self):
-        self._objectCount -= 1
+        Commander._objectCount -= 1
         self.command("destroy")
