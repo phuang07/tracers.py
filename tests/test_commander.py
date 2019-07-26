@@ -27,19 +27,23 @@ class CommanderTests(unittest.TestCase):
         cmder.command("foo", *args)
         cmd = Commander.commands[-1]
 
-        self.assertEqual(cmd["method"], "foo")
-        self.assertEqual(cmd["key"], cmder.key)
-        self.assertEqual(cmd["args"], args)
+        expected_cmd = {
+            "key": cmder.key,
+            "method": "foo",
+            "args": args,
+        }
+
+        self.assertEqual(cmd, expected_cmd)
 
     def test_commander_create(self):
         old_count = Commander._objectCount
 
         args = [1, 2, 3]
-        cmder = Commander(*args)
+        Commander(*args)
         cmd = Commander.commands[-1]
 
         self.assertEqual(old_count + 1, Commander._objectCount)
-        self.assertEqual(cmd["method"], cmder.__class__.__name__)
+        self.assertEqual(cmd["method"], "Commander")
         self.assertEqual(cmd["args"], args)
 
     def test_commander_destroy(self):
