@@ -2,6 +2,7 @@ import unittest
 
 from algorithm_visualizer import commander
 from algorithm_visualizer import Commander
+from algorithm_visualizer.types import UNDEFINED
 
 
 class CommanderTests(unittest.TestCase):
@@ -24,7 +25,7 @@ class CommanderTests(unittest.TestCase):
     def test_commander_command(self):
         cmder = Commander()
         args = [["bar", "baz"], 12]
-        cmder.command("foo", *args)
+        cmder.command("foo", *args, UNDEFINED)
         cmd = Commander.commands[-1]
 
         expected_cmd = {
