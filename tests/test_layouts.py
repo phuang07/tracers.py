@@ -1,68 +1,36 @@
-import unittest
-
 from algorithm_visualizer import Commander
 from algorithm_visualizer import Layout
 
+from tests import CommanderTestCase
 
-class LayoutsTests(unittest.TestCase):
+
+class LayoutsTests(CommanderTestCase):
     def setUp(self):
         self.child = Commander()
         self.layout = Layout([self.child])
-        self.create_cmd = Commander.commands[-1]
 
     def test_layout_create(self):
-        expected_cmd = {
-            "key": self.layout.key,
-            "method": "Layout",
-            "args": [[self.child.key]],
-        }
+        layout = Layout([self.child])
 
-        self.assertEqual(self.create_cmd, expected_cmd)
+        self.assertCommandEqual("Layout", [self.child.key], key=layout.key)
 
     def test_layout_setRoot(self):
         self.layout.setRoot(self.child)
-        cmd = Commander.commands[-1]
 
-        expected_cmd = {
-            "key": None,
-            "method": "setRoot",
-            "args": [self.child.key],
-        }
-
-        self.assertEqual(cmd, expected_cmd)
+        self.assertCommandEqual("setRoot", self.child.key)
 
     def test_layout_add(self):
-        self.layout.add(self.child, 1)
-        cmd = Commander.commands[-1]
+        index = 1
+        self.layout.add(self.child, index)
 
-        expected_cmd = {
-            "key": self.layout.key,
-            "method": "add",
-            "args": [self.child.key, 1],
-        }
-
-        self.assertEqual(cmd, expected_cmd)
+        self.assertCommandEqual("add", self.child.key, index, key=self.layout.key)
 
     def test_layout_remove(self):
         self.layout.remove(self.child)
-        cmd = Commander.commands[-1]
 
-        expected_cmd = {
-            "key": self.layout.key,
-            "method": "remove",
-            "args": [self.child.key],
-        }
-
-        self.assertEqual(cmd, expected_cmd)
+        self.assertCommandEqual("remove", self.child.key, key=self.layout.key)
 
     def test_layout_removeAll(self):
         self.layout.removeAll()
-        cmd = Commander.commands[-1]
 
-        expected_cmd = {
-            "key": self.layout.key,
-            "method": "removeAll",
-            "args": [],
-        }
-
-        self.assertEqual(cmd, expected_cmd)
+        self.assertCommandEqual("removeAll", key=self.layout.key)

@@ -1,61 +1,32 @@
-import unittest
-
-from algorithm_visualizer import Commander
 from algorithm_visualizer import LogTracer
 
+from tests import CommanderTestCase
 
-class LogTests(unittest.TestCase):
+
+class LogTests(CommanderTestCase):
     def setUp(self):
         self.logger = LogTracer()
 
     def test_log_set(self):
         args = [1]
         self.logger.set(*args)
-        cmd = Commander.commands[-1]
 
-        expected_cmd = {
-            "key": self.logger.key,
-            "method": "set",
-            "args": args,
-        }
-
-        self.assertEqual(cmd, expected_cmd)
+        self.assertCommandEqual("set", *args, key=self.logger.key)
 
     def test_log_print(self):
         args = ["hello"]
         self.logger.print(*args)
-        cmd = Commander.commands[-1]
 
-        expected_cmd = {
-            "key": self.logger.key,
-            "method": "print",
-            "args": args,
-        }
-
-        self.assertEqual(cmd, expected_cmd)
+        self.assertCommandEqual("print", *args, key=self.logger.key)
 
     def test_log_println(self):
         args = ["hello"]
         self.logger.println(*args)
-        cmd = Commander.commands[-1]
 
-        expected_cmd = {
-            "key": self.logger.key,
-            "method": "println",
-            "args": args,
-        }
-
-        self.assertEqual(cmd, expected_cmd)
+        self.assertCommandEqual("println", *args, key=self.logger.key)
 
     def test_log_printf(self):
         args = ["%s", "hello"]
         self.logger.printf(*args)
-        cmd = Commander.commands[-1]
 
-        expected_cmd = {
-            "key": self.logger.key,
-            "method": "printf",
-            "args": args,
-        }
-
-        self.assertEqual(cmd, expected_cmd)
+        self.assertCommandEqual("printf", *args, key=self.logger.key)

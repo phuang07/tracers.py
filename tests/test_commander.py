@@ -1,29 +1,21 @@
-import unittest
-
 from algorithm_visualizer import commander
 from algorithm_visualizer import Commander
 from algorithm_visualizer.types import UNDEFINED
 
+from tests import CommanderTestCase
 
-class CommanderTests(unittest.TestCase):
+
+class CommanderTests(CommanderTestCase):
     def setUp(self):
         self.commander = Commander()
 
     def test_commander_create(self):
         old_count = Commander._objectCount
-
         args = [1, 2, 3]
         cmder = Commander(*args)
-        cmd = Commander.commands[-1]
-
-        expected_cmd = {
-            "key": cmder.key,
-            "method": "Commander",
-            "args": args,
-        }
 
         self.assertEqual(old_count + 1, Commander._objectCount)
-        self.assertEqual(cmd, expected_cmd)
+        self.assertCommandEqual("Commander", *args, key=cmder.key)
 
     def test_commander_max_commands(self):
         old_cmds = Commander.commands
@@ -44,29 +36,15 @@ class CommanderTests(unittest.TestCase):
         Commander._objectCount = old_count
 
     def test_commander_command(self):
+        method = "foo"
         args = [["bar", "baz"], 12]
-        self.commander.command("foo", *args, UNDEFINED)
-        cmd = Commander.commands[-1]
+        self.commander.command(method, *args, UNDEFINED)
 
-        expected_cmd = {
-            "key": self.commander.key,
-            "method": "foo",
-            "args": args,
-        }
-
-        self.assertEqual(cmd, expected_cmd)
+        self.assertCommandEqual(method, *args, key=self.commander.key)
 
     def test_commander_destroy(self):
         old_count = Commander._objectCount
-
         self.commander.destroy()
-        cmd = Commander.commands[-1]
-
-        expected_cmd = {
-            "key": self.commander.key,
-            "method": "destroy",
-            "args": [],
-        }
 
         self.assertEqual(old_count - 1, Commander._objectCount)
-        self.assertEqual(cmd, expected_cmd)
+        self.assertCommandEqual("destroy", key=self.commander.key)
