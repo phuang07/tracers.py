@@ -9,7 +9,7 @@ from algorithm_visualizer.types import Number
 class _Randomizer(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def create(self) -> NoReturn:
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class Integer(_Randomizer):
