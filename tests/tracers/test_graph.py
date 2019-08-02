@@ -71,6 +71,24 @@ class GraphTests(CommanderTestCase):
 
         self.assertCommandEqual("removeNode", *args, key=self.tracer.key)
 
+    def test_graph_addEdge(self):
+        args = ["source", "target", 12.34, 1, 2]
+        self.tracer.addEdge(*args)
+
+        self.assertCommandEqual("addEdge", *args, key=self.tracer.key)
+
+    def test_graph_updateEdge(self):
+        args = ["source", "target", 12.34, 1, 2]
+        self.tracer.updateEdge(*args)
+
+        self.assertCommandEqual("updateEdge", *args, key=self.tracer.key)
+
+    def test_graph_removeEdge(self):
+        args = ["source", "target"]
+        self.tracer.removeEdge(*args)
+
+        self.assertCommandEqual("removeEdge", *args, key=self.tracer.key)
+
     def test_graph_visit(self):
         args = ["foo", "bar", 12.34]
         self.tracer.visit(*args)
