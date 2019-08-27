@@ -1,6 +1,8 @@
+from pathlib import PurePath
 from typing import Any, Dict, List, Tuple, TypeVar, Union
 
 
+PathLike = Union[str, bytes, PurePath]
 Number = Union[int, float]
 
 # Types which are serializable by the default JSONEncoder
