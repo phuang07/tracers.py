@@ -30,9 +30,18 @@ class TestExecute(unittest.TestCase):
 
         self.assertEqual(expected_cmds, actual_cmds)
 
-    def test_get_url(self):
+    @mock.patch.object(algorithm_visualizer, "urlopen")
+    def test_get_url(self, mock_urlopen):
+        expected_url = "https://foo.bar"
+
+        response = mock.Mock()
+        type(response).status = mock.PropertyMock(return_value=200)
+        response.read = mock.Mock(return_value=expected_url.encode("utf-8"))
+
+        mock_urlopen.return_value = response
+
         url = algorithm_visualizer.get_url()
-        self.assertIsInstance(url, str)
+        self.assertEqual(url, expected_url)
 
     @mock.patch.object(algorithm_visualizer, "urlopen")
     def test_get_url_non_200(self, mock_urlopen):
