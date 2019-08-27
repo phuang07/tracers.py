@@ -3,6 +3,7 @@ import json
 import os
 import webbrowser
 from pathlib import Path
+from urllib.request import HTTPError, Request, urlopen
 
 from . import randomize as Randomize
 from .commander import Commander
@@ -24,19 +25,29 @@ def create_json_file(path: PathLike = "./visualization.json"):
 
 
 def get_url() -> str:
-    import requests
-
-    commands = json.dumps(Commander.commands, separators=(",", ":"))
-    response = requests.post(
-        "https://algorithm-visualizer.org/api/visualizations",
-        headers={"Content-type": "application/json"},
-        data=commands
+    url = "https://algorithm-visualizer.org/api/visualizations"
+    commands = json.dumps(Commander.commands, separators=(",", ":")).encode('utf-8')
+    request = Request(
+        url,
+        method="POST",
+        data=commands,
+        headers={
+            "Content-type": "application/json; charset=utf-8",
+            "Content-Length": len(commands)
+        }
     )
+    response = urlopen(request)
 
-    if response.status_code == 200:
-        return response.text
+    if response.status == 200:
+        return response.read().decode('utf-8')
     else:
-        raise requests.HTTPError(response=response)
+        raise HTTPError(
+            url=url,
+            code=response.status,
+            msg="Failed to retrieve the scratch URL: non-200 response",
+            hdrs=dict(response.info()),
+            fp=None
+        )
 
 
 @atexit.register
