@@ -9,7 +9,7 @@ from algorithm_visualizer.types import Number
 class _Randomizer(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def create(self) -> NoReturn:
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class Integer(_Randomizer):
@@ -60,15 +60,16 @@ class Array1D(_Randomizer):
 
 class Array2D(Array1D):
     def __init__(self, N: int = 10, M: int = 10, randomizer: _Randomizer = Integer()):
-        super().__init__(N, randomizer)
-        self._M = M
+        super().__init__(M, randomizer)
+        self._M = N
 
     def sorted(self, sorted: bool = True) -> "Array2D":
         self._sorted = sorted
         return self
 
     def create(self) -> List[List]:
-        return [super().create() for _ in range(self._N)]
+        # Explicitly pass args to super() to avoid a TypeError (BPO 26495).
+        return [super(Array2D, self).create() for _ in range(self._M)]
 
 
 class Graph(_Randomizer):
@@ -92,15 +93,19 @@ class Graph(_Randomizer):
         for i in range(self._N):
             for j in range(self._N):
                 if i == j:
+                    # Vertex can't have an edge to itself (no loops)
                     graph[i][j] = 0
                 elif self._directed or i < j:
                     if random.random() >= self._ratio:
+                        # Don't create an edge if the ratio is exceeded
                         graph[i][j] = 0
                     elif self._weighted:
                         graph[i][j] = self._randomizer.create()
                     else:
                         graph[i][j] = 1
                 else:
+                    # Edge is the same for both its vertices if it is not directed
+                    # In such case the initial weight for the edge is set above when i < j
                     graph[i][j] = graph[j][i]
 
         return graph

@@ -8,6 +8,7 @@ class GraphTracer(Tracer):
 
     def directed(self, isDirected: bool = UNDEFINED):
         self.command("directed", isDirected)
+        return self
 
     def weighted(self, isWeighted: bool = UNDEFINED) -> "GraphTracer":
         self.command("weighted", isWeighted)
